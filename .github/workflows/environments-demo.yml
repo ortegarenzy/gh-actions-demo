@@ -40,4 +40,4 @@ jobs:
       - name: Simulate QA deploy
         run: |
           echo "Environment: qa"
-          echo "Dev job completed; QA approval (if configured) was granted."
+          echo "Dev job completed; QA approval was granted."
