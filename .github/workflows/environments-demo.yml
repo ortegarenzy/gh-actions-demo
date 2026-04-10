@@ -1,0 +1,43 @@
+name: Environments demo
+
+# Runs on every push to main and can be started manually. Each job uses a GitHub
+# Environment (sandbox → dev → qa). QA pauses for approval when that environment
+# has required reviewers in Settings → Environments → qa.
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sandbox:
+    name: Sandbox
+    runs-on: ubuntu-latest
+    environment: sandbox
+    steps:
+      - name: Simulate sandbox deploy
+        run: |
+          echo "Environment: sandbox"
+          echo "Note: ${{ github.event_name == 'workflow_dispatch' && inputs.message || format('push {0}', github.sha) }}"
+
+  dev:
+    name: Dev
+    needs: sandbox
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Simulate dev deploy
+        run: |
+          echo "Environment: dev"
+          echo "Sandbox job completed successfully."
+
+  qa:
+    name: QA
+    needs: dev
+    runs-on: ubuntu-latest
+    environment: qa
+    steps:
+      - name: Simulate QA deploy
+        run: |
+          echo "Environment: qa"
+          echo "Dev job completed; QA approval (if configured) was granted."
